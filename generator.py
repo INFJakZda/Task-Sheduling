@@ -1,4 +1,4 @@
-
+import numpy as np
 
 def prepareData(noFile, noInstance):
 	with open("data/sch" + str(noFile) + ".txt",'r') as fp:
@@ -13,12 +13,18 @@ def prepareData(noFile, noInstance):
 			else:
 				for _ in range(noLines):
 					fp.readline()
-			k += 1
 		return arr
 
+def calculateSum(dataSet, h):
+	sum = 0
+	for row in dataSet:
+		sum += row[0]
+	return round(sum * h)
+
 if __name__ == '__main__':
-	n = 20
-	k = 5
+	n = 10
+	k = 2
 	h = 0.4
 
 	dataSet = prepareData(n, k)
+	dueTime = calculateSum(dataSet, h)
