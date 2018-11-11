@@ -1,5 +1,3 @@
-import numpy as np
-
 def prepareData(noFile, noInstance):
 	with open("data/sch" + str(noFile) + ".txt",'r') as fp:
 		noInstances = int(fp.readline())
@@ -21,10 +19,49 @@ def calculateSum(dataSet, h):
 		sum += row[0]
 	return round(sum * h)
 
+def calculatePenalty(tasks, dueTime):
+	penalty = 0
+	time = 0
+	for task in tasks:
+		time += task[0] 
+		penaltyTime = dueTime - time
+		if (penaltyTime < 0):
+			penalty -= penaltyTime * task[2]
+		elif (penaltyTime > 0):
+			penalty += penaltyTime * task[1]
+	return penalty
+	
+
+def schedule(tasks, dueTime):
+	ScheduledTasks = []
+	BestScheduled = []
+	bestTime = 0
+	for idx, task in enumerate(tasks):
+		if not ScheduledTasks:
+			ScheduledTasks.append(task)
+		else:
+			bestTime = 999999999
+			for i in range( len(ScheduledTasks) + 1 ):
+				ScheduledTasks.insert(i, task)
+				currentPenalty = calculatePenalty(ScheduledTasks, dueTime)
+				if (bestTime > currentPenalty):
+					bestTime = currentPenalty
+					BestScheduled = ScheduledTasks.copy()
+				ScheduledTasks.pop(i)
+			ScheduledTasks = BestScheduled.copy()
+	print(calculatePenalty(ScheduledTasks, dueTime))
+	#print(ScheduledTasks)
+
 if __name__ == '__main__':
-	n = 10
-	k = 2
-	h = 0.4
+	n = 20
+	k = 7
+	h = 0.2
 
 	dataSet = prepareData(n, k)
 	dueTime = calculateSum(dataSet, h)
+
+	#Prepare data set
+	dataSet.sort(key=lambda t: t[1] - t[2])
+
+	#Schedule task with algorithm
+	schedule(dataSet, dueTime)
