@@ -61,7 +61,7 @@ if __name__ == '__main__':
 	dueTime = calculateSum(dataSet, h)
 
 	#Prepare data set
-	dataSet.sort(key=lambda t: t[1] - t[2])
+	tasks.sort(key = lambda task: task[1] - task[2])
 
 	#Schedule task with algorithm
 	schedule(dataSet, dueTime)
