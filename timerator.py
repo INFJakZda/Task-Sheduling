@@ -55,35 +55,46 @@ def schedule(tasks, dueTime):
 			ScheduledTasks = BestScheduled.copy()
 	return ScheduledTasks, bestTime
 
-def saveData(tasks, processTime, elapsedTime):
+def saveData(tasks, processTime):
 	times = [[] for _ in range( len(tasks) )]
 	time = 0
 	for task in tasks:
-		times[task[3] - 1] = time
 		time += task[0]
+		times[task[3] - 1] = time
 	with open("result.txt", 'w') as fw:
 		fw.write(str(processTime) + '\n')
-		fw.write(str(elapsedTime) + '\n')
 		fw.write(' '.join(map(str, times)))
 
+def saveSprawko(i, n, k, h, time, procesTime):
+	with open("sprawko.txt", 'a+') as fw:
+		fw.write(str(str(i) + ' ' + str(n) + ' ' + str(k) + ' ' + str(h) + ' ' + "0" + ' ' + str(time) + ' ' + "0" + ' ' + str(procesTime) + "\n"))
+
+
 if __name__ == '__main__':
-	start = datetime.datetime.now()
-	
-	n = 10
-	k = 8
-	h = 0.2
+    nn = [10, 20, 50, 100, 200, 500, 1000]
+    kk = [2, 7]
+    hh = [0.4, 0.6]
+    ii = 1
 
-	tasks = prepareData(n, k)
-	dueTime = calculateSum(tasks, h)
+    for n in nn:
+        for k in kk:
+            for h in hh:
 
-	#Prepare data set
-	tasks.sort(key = lambda task: task[1] - task[2])
+                start = datetime.datetime.now()
 
-	#Schedule task with algorithm
-	scheduledTasks, time = schedule(tasks, dueTime)
+                tasks = prepareData(n, k)
+                dueTime = calculateSum(tasks, h)
 
-	end = datetime.datetime.now()
-	diff = end - start
+                #Prepare data set
+                tasks.sort(key = lambda task: task[1] - task[2])
 
-	#Save data
-	saveData(scheduledTasks, time, round(diff.total_seconds() * 1000000))
+                #Schedule task with algorithm
+                scheduledTasks, time = schedule(tasks, dueTime)
+
+                end = datetime.datetime.now()
+                diff = end - start
+
+                print(ii, n)
+                #Save data
+                saveSprawko(ii, n, k, h, time, round(diff.total_seconds() * 1000000))
+                ii += 1
