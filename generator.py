@@ -5,17 +5,19 @@ def prepareData(noFile, noInstance):
 		for k in range(1, noInstances + 1):
 			noLines = int(fp.readline())
 			if (k == noInstance):
-				for _ in range(noLines):
-					arr.append(list(map(int, fp.readline().split())))
+				for idx in range(noLines):
+					ele = list(map(int, fp.readline().split()))
+					ele.append(idx + 1)
+					arr.append(ele)
 				break
 			else:
 				for _ in range(noLines):
 					fp.readline()
 		return arr
 
-def calculateSum(dataSet, h):
+def calculateSum(tasks, h):
 	sum = 0
-	for row in dataSet:
+	for row in tasks:
 		sum += row[0]
 	return round(sum * h)
 
@@ -49,19 +51,31 @@ def schedule(tasks, dueTime):
 					BestScheduled = ScheduledTasks.copy()
 				ScheduledTasks.pop(i)
 			ScheduledTasks = BestScheduled.copy()
-	print(calculatePenalty(ScheduledTasks, dueTime))
-	#print(ScheduledTasks)
+	return ScheduledTasks, bestTime
+
+def saveData(tasks, processTime):
+	times = [[] for _ in range( len(tasks) )]
+	time = 0
+	for task in tasks:
+		time += task[0]
+		times[task[3] - 1] = time
+	with open("result.txt", 'w') as fw:
+		fw.write(str(processTime) + '\n')
+		fw.write(' '.join(map(str, times)))
 
 if __name__ == '__main__':
-	n = 20
-	k = 7
+	n = 10
+	k = 8
 	h = 0.2
 
-	dataSet = prepareData(n, k)
-	dueTime = calculateSum(dataSet, h)
+	tasks = prepareData(n, k)
+	dueTime = calculateSum(tasks, h)
 
 	#Prepare data set
 	tasks.sort(key = lambda task: task[1] - task[2])
 
 	#Schedule task with algorithm
-	schedule(dataSet, dueTime)
+	scheduledTasks, time = schedule(tasks, dueTime)
+
+	#Save data
+	saveData(scheduledTasks, time)
