@@ -40,8 +40,8 @@ def saveData(tasks, processTime, elapsedTime):
 	times = [[] for _ in range( len(tasks) )]
 	time = 0
 	for task in tasks:
-		time += task[0]
 		times[task[3] - 1] = time
+		time += task[0]
 	with open("result.txt", 'w') as fw:
 		fw.write(str(processTime) + '\n')
 		fw.write(str(elapsedTime) + '\n')
