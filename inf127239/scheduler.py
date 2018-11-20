@@ -1,8 +1,9 @@
 import datetime
 import sys
+from math import floor
 
 def prepareData(noFile, noInstance):
-	with open("data/sch" + str(noFile) + ".txt",'r') as fp:
+	with open("sch" + str(noFile) + ".txt",'r') as fp:
 		noInstances = int(fp.readline())
 		arr = []
 		for k in range(1, noInstances + 1):
@@ -22,7 +23,7 @@ def calculateSum(tasks, h):
 	sum = 0
 	for row in tasks:
 		sum += row[0]
-	return round(sum * h)
+	return floor(sum * h)
 
 def calculatePenalty(tasks, dueTime):
 	penalty = 0
@@ -42,7 +43,7 @@ def saveData(tasks, processTime, elapsedTime):
 	for task in tasks:
 		times[task[3] - 1] = time
 		time += task[0]
-	with open("result.txt", 'w') as fw:
+	with open("wyniki.txt", 'w') as fw:
 		fw.write(str(processTime) + '\n')
 		fw.write(str(elapsedTime) + '\n')
 		fw.write(' '.join(map(str, times)))

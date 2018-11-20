@@ -1,8 +1,9 @@
 import datetime
 from subprocess import check_call
+from math import floor
 
 def prepareData(noFile, noInstance):
-	with open("data/sch" + str(noFile) + ".txt",'r') as fp:
+	with open("sch" + str(noFile) + ".txt",'r') as fp:
 		noInstances = int(fp.readline())
 		arr = []
 		for k in range(1, noInstances + 1):
@@ -22,7 +23,7 @@ def calculateSum(tasks, h):
 	sum = 0
 	for row in tasks:
 		sum += row[0]
-	return round(sum * h)	
+	return floor(sum * h)	
 
 def saveSprawko(i, n, k, h, time, procesTime):
 	with open("sprawko.txt", 'a+') as fw:
@@ -41,10 +42,10 @@ def calculatePenalty2(tasks, dueTime):
 	return penalty
 
 def calculateTime(tasks, dueTime):
-    with open("result.txt",'r') as fp:
+    with open("wyniki.txt",'r') as fp:
         arr = []
         time = int(fp.readline())
-        timeRun = int(fp.readline())
+        timeRun = float(fp.readline())
         startTimes = [int(i) for i in fp.readline().split()]
         # print(startTimes)
         # print(tasks)
@@ -57,10 +58,12 @@ def calculateTime(tasks, dueTime):
 
 
 if __name__ == '__main__':
-    nn = [10]
-    kk = [1]
-    hh = [0.6]
+    nn = [10, 20, 50, 100, 200, 500, 1000]
+    #nn = [10]
+    kk = [2, 7]
+    hh = [0.4, 0.6]
     ii = 1
+    open("sprawko.txt", 'w').close()
 
     for n in nn:
         for k in kk:
