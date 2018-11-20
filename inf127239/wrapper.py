@@ -22,49 +22,7 @@ def calculateSum(tasks, h):
 	sum = 0
 	for row in tasks:
 		sum += row[0]
-	return round(sum * h)
-
-def calculatePenalty(tasks, dueTime):
-	penalty = 0
-	time = 0
-	for task in tasks:
-		time += task[0] 
-		penaltyTime = dueTime - time
-		if (penaltyTime < 0):
-			penalty -= penaltyTime * task[2]
-		elif (penaltyTime > 0):
-			penalty += penaltyTime * task[1]
-	return penalty
-	
-
-def schedule(tasks, dueTime):
-	ScheduledTasks = []
-	BestScheduled = []
-	bestTime = 0
-	for idx, task in enumerate(tasks):
-		if not ScheduledTasks:
-			ScheduledTasks.append(task)
-		else:
-			bestTime = 999999999
-			for i in range( len(ScheduledTasks) + 1 ):
-				ScheduledTasks.insert(i, task)
-				currentPenalty = calculatePenalty(ScheduledTasks, dueTime)
-				if (bestTime > currentPenalty):
-					bestTime = currentPenalty
-					BestScheduled = ScheduledTasks.copy()
-				ScheduledTasks.pop(i)
-			ScheduledTasks = BestScheduled.copy()
-	return ScheduledTasks, bestTime
-
-def saveData(tasks, processTime):
-	times = [[] for _ in range( len(tasks) )]
-	time = 0
-	for task in tasks:
-		time += task[0]
-		times[task[3] - 1] = time
-	with open("result.txt", 'w') as fw:
-		fw.write(str(processTime) + '\n')
-		fw.write(' '.join(map(str, times)))
+	return round(sum * h)	
 
 def saveSprawko(i, n, k, h, time, procesTime):
 	with open("sprawko.txt", 'a+') as fw:
@@ -74,7 +32,7 @@ def calculatePenalty2(tasks, dueTime):
 	penalty = 0
 	time = 0
 	for task in tasks:
-		time = task[4] 
+		time = task[4] + task[0]
 		penaltyTime = dueTime - time
 		if (penaltyTime < 0):
 			penalty -= penaltyTime * task[2]
@@ -87,11 +45,11 @@ def calculateTime(tasks, dueTime):
         arr = []
         time = int(fp.readline())
         timeRun = int(fp.readline())
-        endTimes = [int(i) for i in fp.readline().split()]
-        # print(endTimes)
+        startTimes = [int(i) for i in fp.readline().split()]
+        # print(startTimes)
         # print(tasks)
         for i in range(len(tasks)):
-            tasks[i].append(endTimes[i])
+            tasks[i].append(startTimes[i])
         myTime = calculatePenalty2(tasks, dueTime)
         if(myTime != time):
             print("ERR: Times are diff")
@@ -99,9 +57,9 @@ def calculateTime(tasks, dueTime):
 
 
 if __name__ == '__main__':
-    nn = [10, 20, 50, 100, 200, 500, 1000]
-    kk = [2, 7]
-    hh = [0.4, 0.6]
+    nn = [10]
+    kk = [1]
+    hh = [0.6]
     ii = 1
 
     for n in nn:
